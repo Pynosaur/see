@@ -1,0 +1,45 @@
+NAME: see
+VERSION: "0.1.0"
+DESCRIPTION: >
+  Display file contents with slicing, numbering, and emphasis. Supports Python-like slicing for lines and characters (start:stop[:step]) plus explicit lists (N,N,N). Negative indices count from the end. Line numbers shown with -n always reflect original file positions (no renumbering when slicing). Emphasis can target patterns (-e) or entire lines (-E) with color/bold options.
+USAGE:
+  - "see [OPTIONS] [FILE...]"
+  - "see file.txt"
+  - "see -l 0:10 file.txt"
+  - "see -l 1,3,5 file.txt"
+  - "see -e 'pattern' file.txt"
+OPTIONS:
+  - "-h, --help                Show help message"
+  - "-v, --version             Show version information"
+  - "-l, --lines SLICE         Lines slice: start:stop[:step] or N,N,N (0-indexed; negatives from end; single N allowed)"
+  - "-c, --chars SLICE         Characters slice: start:stop[:step] (0-indexed; negatives from end)"
+  - "-e, --emphasize PATTERN   Highlight pattern (repeatable)"
+  - "-E, --emphasize-lines     Emphasize entire lines: N,N,N or start:stop"
+  - "--color COLOR             Emphasis color (red, green, yellow, blue, magenta, cyan)"
+  - "--bold                    Use bold text for emphasis"
+  - "-i, --ignore-case         Case-insensitive pattern matching"
+  - "-n, --number              Show line numbers (original file positions)"
+EXAMPLES:
+  - "see file.txt                       # Display file"
+  - "see -l 0:10 file.txt               # Slice: lines 0-10"
+  - "see -l :5 file.txt                 # Slice: first 5 lines"
+  - "see -l 5: file.txt                 # Slice: from line 5 to end"
+  - "see -l -5: file.txt                # Slice: last 5 lines"
+  - "see -l 5 file.txt                  # Single: just line 5"
+  - "see -l -5 file.txt                 # Single: line at index -5"
+  - "see -l 0,2,4 file.txt              # Multiple: lines 0, 2, 4"
+  - "see -l 0:20:2 file.txt             # Slice with step: every 2nd line"
+  - "see -e error -e warning file.txt   # Highlight patterns"
+  - "see -E 1,3,5 file.txt              # Emphasize entire lines 1, 3, 5"
+  - "see -E 0:5 --bold file.txt         # Emphasize lines 0-5 in bold"
+  - "see -n file.txt                    # Show line numbers"
+OUTPUT: >
+  File contents printed to stdout with optional formatting. Exit code 0 on success; non-zero on errors (missing file, invalid slice, etc.).
+AUTHOR: "@spacemany2k38"
+DATE: "2025-12-27"
+NOTES:
+  - "Line slices and explicit indices are 0-indexed; negatives count from end."
+  - "Single N (including negative) is a single line, not a slice."
+  - "Line numbers shown by -n always reflect original file positions (no renumbering after slicing)."
+  - "Duplicate line indices are de-duplicated; order is preserved by sorting."
+  - "Emphasis (-e) is regex literal search with optional -i; -E targets whole lines."

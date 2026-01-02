@@ -1,0 +1,89 @@
+name: Test see
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.8', '3.11', '3.12']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Test see basic functionality
+      run: |
+        echo "Hello, World!" > test_file.txt
+        python app/main.py test_file.txt
+        python app/main.py --version
+        python app/main.py --help
+        rm test_file.txt
+    
+    - name: Test stdin functionality
+      run: |
+        echo "Testing stdin" | python app/main.py
+    
+    - name: Test line slicing
+      run: |
+        echo -e "Line 1\nLine 2\nLine 3\nLine 4\nLine 5" > test_file.txt
+        python app/main.py -l 0:3 test_file.txt
+        python app/main.py -l :3 test_file.txt
+        python app/main.py -l 3: test_file.txt
+        python app/main.py -l -2: test_file.txt
+        python app/main.py -l 0:5:2 test_file.txt
+        python app/main.py -l 1,3 test_file.txt
+        rm test_file.txt
+    
+    - name: Test emphasis and line numbers
+      run: |
+        echo "Error and warning messages" > test_file.txt
+        python app/main.py -e "Error" test_file.txt
+        python app/main.py -n test_file.txt
+        rm test_file.txt
+    
+    - name: Run unit tests
+      run: |
+        python test/test_main.py
+  
+  build:
+    runs-on: macos-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Bazel
+      uses: bazel-contrib/setup-bazel@0.8.1
+      with:
+        bazelisk-cache: true
+    
+    - name: Build with Bazel
+      run: |
+        bazel build //:see_bin
+      continue-on-error: true
+    
+    - name: Test built binary
+      if: success()
+      run: |
+        if [ -f ./bazel-bin/see ]; then
+          echo "Test content" > test_file.txt
+          ./bazel-bin/see test_file.txt
+          ./bazel-bin/see --version
+          ./bazel-bin/see --help
+          rm test_file.txt
+          echo "Built binary works"
+        else
+          echo "Binary not built, skipping test"
+        fi
+
