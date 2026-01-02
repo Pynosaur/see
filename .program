@@ -1,0 +1,6 @@
+name: see
+version: 0.1.1
+author: @spacemany2k38
+description: Display file contents with slicing and emphasis
+type: cli-tool
+

@@ -1,5 +1,5 @@
 NAME: see
-VERSION: "0.1.0"
+VERSION: "0.1.1"
 DESCRIPTION: >
   Display file contents with slicing, numbering, and emphasis. Supports Python-like slicing for lines and characters (start:stop[:step]) plus explicit lists (N,N,N). Negative indices count from the end. Line numbers shown with -n always reflect original file positions (no renumbering when slicing). Emphasis can target patterns (-e) or entire lines (-E) with color/bold options.
 USAGE:
