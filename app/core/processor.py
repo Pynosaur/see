@@ -32,7 +32,8 @@ def emphasize_lines(lines, line_spec, color='red', bold=False):
 
     Args:
         lines: List of lines
-        line_spec: slice object or list of indices (0-indexed, negative indices supported)
+        line_spec: slice object or list of indices (0-indexed, negative indices
+        supported)
         color: Color name
         bold: Use bold
 

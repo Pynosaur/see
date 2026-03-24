@@ -110,7 +110,9 @@ def main():
             return 130
 
     # Extract slice arguments before argparse
-    cleaned_argv, lines_value, chars_value, emphasize_lines_value = extract_slice_args(sys.argv[1:])
+    (
+        cleaned_argv, lines_value, chars_value, emphasize_lines_value,
+    ) = extract_slice_args(sys.argv[1:])
 
     parser = create_parser()
     args = parser.parse_args(cleaned_argv)
