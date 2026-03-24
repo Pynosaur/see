@@ -2,7 +2,7 @@
 
 Display file contents with optional formatting, slicing, and emphasis.
 
-Version: 0.1.0
+Version: 0.1.2
 
 ## Features
 
