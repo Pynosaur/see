@@ -9,7 +9,7 @@ from pathlib import Path
 
 def read_file(filepath):
     """Read file contents.
-    
+
     Returns:
         Tuple of (success, content_string)
     """
@@ -21,10 +21,10 @@ def read_file(filepath):
         if not path.is_file():
             print(f"see: {filepath}: Is a directory", file=sys.stderr)
             return (False, None)
-        
+
         content = path.read_text()
         return (True, content)
-    
+
     except PermissionError:
         print(f"see: {filepath}: Permission denied", file=sys.stderr)
         return (False, None)
@@ -35,7 +35,7 @@ def read_file(filepath):
 
 def read_stdin():
     """Read from stdin.
-    
+
     Returns:
         String content or None on error
     """

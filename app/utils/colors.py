@@ -13,7 +13,7 @@ class Colors:
     BLUE = '\033[94m'
     MAGENTA = '\033[95m'
     CYAN = '\033[96m'
-    
+
     @staticmethod
     def get_color(name):
         """Get color code by name."""
@@ -26,5 +26,4 @@ class Colors:
             'cyan': Colors.CYAN,
         }
         return colors.get(name.lower(), Colors.RED)
-
 

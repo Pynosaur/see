@@ -14,30 +14,58 @@ def read_app_doc(app_name):
         Path(__file__).parent.parent.parent.parent / "doc" / f"{app_name}.yaml",
         Path("doc") / f"{app_name}.yaml",
     ]
-    
+
     if hasattr(sys, '_MEIPASS'):
         doc_paths.insert(0, Path(sys._MEIPASS) / "doc" / f"{app_name}.yaml")
-    
+
     for path in doc_paths:
         if path.exists():
             try:
                 content = path.read_text()
-                
+
                 version = re.search(r'^VERSION:\s*"([^"]+)"', content, re.MULTILINE)
                 version = version.group(1) if version else ''
-                
-                desc = re.search(r'^DESCRIPTION:\s*>\s*(.+?)(?=^[A-Z_]+:)', content, re.MULTILINE | re.DOTALL)
+
+                desc = re.search(
+                    '^DESCRIPTION:\\s*>\\s*(.+?)(?=^[A-Z_]+:)',
+                    content,
+                    re.MULTILINE | re.DOTALL,
+                )
                 desc = desc.group(1).strip() if desc else ''
-                
-                usage_section = re.search(r'^USAGE:(.+?)^OPTIONS:', content, re.MULTILINE | re.DOTALL)
-                usage = re.findall(r'-\s*"([^"]+)"', usage_section.group(1)) if usage_section else []
-                
-                options_section = re.search(r'^OPTIONS:(.+?)^EXAMPLES:', content, re.MULTILINE | re.DOTALL)
-                options = re.findall(r'-\s*"([^"]+)"', options_section.group(1)) if options_section else []
-                
-                examples_section = re.search(r'^EXAMPLES:(.+?)^OUTPUT:', content, re.MULTILINE | re.DOTALL)
-                examples = re.findall(r'-\s*"([^"]+)"', examples_section.group(1)) if examples_section else []
-                
+
+                usage_section = re.search(
+                    '^USAGE:(.+?)^OPTIONS:',
+                    content,
+                    re.MULTILINE | re.DOTALL,
+                )
+                usage = (
+                    re.findall(r'-\s*"([^"]+)"', usage_section.group(1))
+                    if usage_section
+                    else []
+                )
+
+                options_section = re.search(
+                    '^OPTIONS:(.+?)^EXAMPLES:',
+                    content,
+                    re.MULTILINE | re.DOTALL,
+                )
+                options = (
+                    re.findall(r'-\s*"([^"]+)"', options_section.group(1))
+                    if options_section
+                    else []
+                )
+
+                examples_section = re.search(
+                    '^EXAMPLES:(.+?)^OUTPUT:',
+                    content,
+                    re.MULTILINE | re.DOTALL,
+                )
+                examples = (
+                    re.findall(r'-\s*"([^"]+)"', examples_section.group(1))
+                    if examples_section
+                    else []
+                )
+
                 return {
                     'version': version,
                     'description': desc,
@@ -47,6 +75,6 @@ def read_app_doc(app_name):
                 }
             except (OSError, UnicodeDecodeError):
                 continue
-    
+
     return {}
 
