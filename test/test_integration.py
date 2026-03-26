@@ -48,7 +48,7 @@ class TestIntegration(unittest.TestCase):
         """Test --version flag."""
         result = self.run_see("--version")
         self.assertEqual(result.returncode, 0)
-        self.assertIn("0.1.0", result.stdout)
+        self.assertIn("0.1.2", result.stdout)
 
     def test_line_slice_range(self):
         """Test line slicing with range (0:3)."""
